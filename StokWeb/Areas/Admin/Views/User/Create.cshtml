@@ -1,0 +1,49 @@
+﻿@model Entity.User
+
+@{
+    ViewData["Title"] = "CreateUser";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title" style="text-align: center; font-size: 28px;">Kullanıcı Oluşturma</h4>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white text-center">
+                            <div class="card-title" style="font-size: 20px;">Kullanıcı Bilgileri</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="userName" style="font-size: 16px;">Kullanıcı Adı</label>
+                                <input type="text" class="form-control" asp-for="UserName" id="userName" style="font-size: 16px;">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password" style="font-size: 16px;">Şifre</label>
+                                <input type="password" class="form-control" asp-for="Password" id="password" style="font-size: 16px;">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rol" style="font-size: 16px;">Rol</label>
+                                <input type="text" class="form-control" asp-for="Rol" id="rol" style="font-size: 16px;">
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button class="btn btn-success btn-lg" style="font-size: 16px;">Oluştur</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+﻿@model Entity.CardItem
+
+@{
+    ViewData["Title"] = "UpdateCardItem";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title">Category Settings</h4>
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post">
+                    <div class="carditem">
+                        <div class="carditem-header">
+                            <div class="carditem-title">Update Category Page</div>
+                        </div>
+                        <div class="carditem-body">
+                            <!-- Gizli alanlar (Hidden fields) ile mevcut verileri gönderiyoruz -->
+                            <input type="hidden" asp-for="CardItemId" /> <!-- CardItemId kullanıcının görmediği gizli alandır -->
+                            <input type="hidden" asp-for="CardId" /> <!-- CardId kullanıcıdan alınmayacak, gizli alanda olacak -->
+                            <input type="hidden" asp-for="ItemId" /> <!-- ItemId de kullanıcıdan alınmayacak, gizli alanda olacak -->
+                            <!-- Miktar (itemquantity) kullanıcıdan alınacak -->
+                            <div class="form-group">
+                                <label for="itemquantity">Bileşen Stoğunuzu Giriniz</label>
+                                <input type="number" class="form-control" asp-for="itemquantity" id="itemquantity" />
+                            </div>
+                        </div>
+
+                        <div class="card-action">
+                            <button class="btn btn-primary">Güncelle</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<script>
+    document.getElementById('addButton').addEventListener('click', function () {
+        let formContainer = document.getElementById('formContainer');
+
+        // Yeni bir div oluşturuyoruz
+        let newFormGroup = document.createElement('div');
+        newFormGroup.classList.add('form-group');
+
+        // Yan yana olmak için flexbox kullanacağız
+        let flexContainer = document.createElement('div');
+        flexContainer.style.display = 'flex';
+        flexContainer.style.gap = '15px'; // Aralarındaki boşluk için
+
+        // ItemId Select box
+        let itemSelectGroup = document.createElement('div');
+        itemSelectGroup.classList.add('form-group');
+        itemSelectGroup.innerHTML = `
+                <label for="ItemId">Bileşen ID Seçiniz</label>
+                <select class="form-control" name="ItemIds[]">
+    @foreach (var item in ViewBag.ItemList as List<Entity.Item>)
+    {
+                                    <option value="@item.ItemId">@item.ItemName</option>
+    }
+                </select>
+            `;
+
+        // Quantity input box
+        let quantityGroup = document.createElement('div');
+        quantityGroup.classList.add('form-group');
+        quantityGroup.innerHTML = `
+                <label for="Quantity">Adet Giriniz</label>
+                <input type="number" class="form-control" name="Quantities[]" />
+            `;
+
+        // Flex container içine her iki form grubunu ekliyoruz
+        flexContainer.appendChild(itemSelectGroup);
+        flexContainer.appendChild(quantityGroup);
+
+        // Flex container'ı yeni form grubu içine ekliyoruz
+        newFormGroup.appendChild(flexContainer);
+
+        // Son olarak yeni form grubunu formContainer'a ekliyoruz
+        formContainer.appendChild(newFormGroup);
+    });
+</script>*@

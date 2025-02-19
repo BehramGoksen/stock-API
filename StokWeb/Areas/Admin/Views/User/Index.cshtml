@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Entity.User>
+
+@{
+    ViewData["Title"] = "Kullanıcı Yönetimi";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var currentPage = Convert.ToInt32(ViewData["CurrentPage"]);
+    var totalPages = Convert.ToInt32(ViewData["TotalPages"]);
+}
+
+<h1>Kullanıcı Yönetimi</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-success btn-lg">Yeni Kullanıcı Oluştur</a>
+</p>
+<form method="get" action="@Url.Action("Index", "User")">
+    <div class="d-flex">
+        <input type="text" name="searchQuery" class="form-control" placeholder="Kullanıcı Adı'na göre arama yapın" value="@ViewData["SearchQuery"]" style="width: 250px;" />
+        <button type="submit" class="btn btn-primary ml-2">Ara</button>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rol)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="userTableBody">
+        @foreach (var item in Model)
+        {
+            <tr class="user-item" data-username="@item.UserName.ToLower()">
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rol)
+                </td>
+                <td>
+                    @Html.ActionLink("Güncelle", "Update", "User", new { id = @item.UserId }, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Sil", "Delete", "User", new { id = @item.UserId }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- Sayfalama -->
+<div class="d-flex justify-content-between align-items-center">
+    <div>
+        <span>Toplam @ViewData["TotalItems"] öğe, sayfa @ViewData["CurrentPage"] / @ViewData["TotalPages"]</span>
+    </div>
+    <div>
+        @if (currentPage != 1)
+        {
+            <a asp-action="Index" asp-route-page="1" class="btn btn-outline-primary">İlk</a>
+            <a asp-action="Index" asp-route-page="@(Convert.ToInt32(ViewData["CurrentPage"]) - 1)" class="btn btn-outline-primary">Önceki</a>
+        }
+
+        @if (ViewData["CurrentPage"] != ViewData["TotalPages"])
+        {
+            <a asp-action="Index" asp-route-page="@(Convert.ToInt32(ViewData["CurrentPage"]) + 1)" class="btn btn-outline-primary">Sonraki</a>
+            <a asp-action="Index" asp-route-page="@(ViewData["TotalPages"])" class="btn btn-outline-primary">Son</a>
+        }
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // CardName'e göre filtreleme fonksiyonu
+        $('#cardNameSearch').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+
+            // Sayfayı yenileyip yeni filtre ile sorgulama yapıyoruz
+            var url = '@Url.Action("Index", "User")';
+            window.location.href = url + '?searchQuery=' + value + '&page=1';  // Sayfa numarasını 1 yapıyoruz
+        });
+    });
+</script>

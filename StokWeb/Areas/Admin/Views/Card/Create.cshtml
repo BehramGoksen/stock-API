@@ -1,0 +1,45 @@
+﻿@model Entity.Card
+
+@{
+    ViewData["Title"] = "CreateCard";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title" style="display: flex; justify-content: center;">Yeni Kart Oluşturma</h4>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white text-center">
+                            <div class="card-title">Kart Bilgileri</div>
+                        </div>
+                        <div class="card-body">
+                            
+                            <div class="form-group">
+                                <label for="categoryname" style="display: block; text-align: center;">Yeni Kart İsminizi Giriniz</label>
+                                <input type="text" class="form-control" asp-for="CardName" id="cardname">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="categoryname" style="display: block; text-align: center;">Yeni Kart Stoğunuzu Giriniz</label>
+                                <input type="text" class="form-control" asp-for="CardQuantity" id="cardQuantity">
+                            </div>
+                        </div>
+                        <div class="card-action" style="display: flex; justify-content: center;">
+                            <button class="btn btn-success">Oluştur</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

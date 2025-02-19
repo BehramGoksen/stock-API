@@ -1,0 +1,134 @@
+﻿@model IEnumerable<Entity.Card>
+@{
+    ViewData["Title"] = "Kart Yönetimi";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var currentPage = Convert.ToInt32(ViewData["CurrentPage"]);
+    var totalPages = Convert.ToInt32(ViewData["TotalPages"]);
+}
+<!-- Stil kütüphanesi -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5 text-primary">
+            <i class="fas fa-credit-card"></i> Kart Yönetimi
+        </h1>
+        <form method="get" action="@Url.Action("Index", "Card")">
+            <div class="d-flex">
+                <input type="text" name="searchQuery" class="form-control" placeholder="Kart Adı'na göre arama yapın" value="@ViewData["SearchQuery"]" style="width: 250px;" />
+                <button type="submit" class="btn btn-primary ml-2">Ara</button>
+            </div>
+        </form>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-outline-success btn-lg">
+                <i class="fas fa-plus-circle"></i> Yeni Kart Oluştur
+            </a>
+        }
+    </div>
+
+    <table class="table table-hover table-striped shadow-sm rounded">
+        <thead class="thead-dark">
+            <tr>
+                <th>Kart ID</th>
+                <th>Kart Adı</th>
+                <th>Miktar</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th class="text-center">İşlemler</th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CardId</td>
+                    <td>@item.CardName</td>
+                    <td>@item.CardQuantity</td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td class="text-center">
+                            <!-- Güncelle Butonu -->
+                    @Html.ActionLink(
+                    "Güncelle",
+                    "Update",
+                    "Card",
+                    new { id = item.CardId },
+                    new { @class = "btn btn-warning btn-sm mx-1", title = "Kartı güncelle" }
+                    )
+
+                            <!-- Sil Butonu -->
+                    @Html.ActionLink(
+                    "Sil",
+                    "Delete",
+                    "Card",
+                    new { id = item.CardId },
+                    new { @class = "btn btn-danger btn-sm mx-1", title = "Kartı sil" }
+                    )
+
+                            <!-- Stok Artır Formu -->
+                            @using (Html.BeginForm("IncreaseStock", "Card", FormMethod.Post))
+                            {
+                                <div class="d-inline-block mx-1">
+                                    <input type="hidden" name="id" value="@item.CardId" />
+                                    <input type="number" name="amount" min="1" value="1" class="form-control form-control-sm d-inline w-auto" />
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fas fa-arrow-up"></i> Artır
+                                    </button>
+                                </div>
+                            }
+
+                            <!-- Stok Azalt Formu -->
+                            @using (Html.BeginForm("DecreaseStock", "Card", FormMethod.Post))
+                            {
+                                <div class="d-inline-block mx-1">
+                                    <input type="hidden" name="id" value="@item.CardId" />
+                                    <input type="number" name="amount" min="1" value="1" class="form-control form-control-sm d-inline w-auto" />
+                                    <button type="submit" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-arrow-down"></i> Azalt
+                                    </button>
+                                </div>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Sayfalama -->
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <span>Toplam @ViewData["TotalItems"] öğe, sayfa @ViewData["CurrentPage"] / @ViewData["TotalPages"]</span>
+        </div>
+        <div>
+            @if (currentPage != 1)
+            {
+                <a asp-action="Index" asp-route-page="1" class="btn btn-outline-primary">İlk</a>
+                <a asp-action="Index" asp-route-page="@(Convert.ToInt32(ViewData["CurrentPage"]) - 1)" class="btn btn-outline-primary">Önceki</a>
+            }
+
+            @if (ViewData["CurrentPage"] != ViewData["TotalPages"])
+            {
+                <a asp-action="Index" asp-route-page="@(Convert.ToInt32(ViewData["CurrentPage"]) + 1)" class="btn btn-outline-primary">Sonraki</a>
+                <a asp-action="Index" asp-route-page="@(ViewData["TotalPages"])" class="btn btn-outline-primary">Son</a>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // CardName'e göre filtreleme fonksiyonu
+        $('#cardNameSearch').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+
+            // Sayfayı yenileyip yeni filtre ile sorgulama yapıyoruz
+            var url = '@Url.Action("Index", "Card")';
+            window.location.href = url + '?searchQuery=' + value + '&page=1';  // Sayfa numarasını 1 yapıyoruz
+        });
+    });
+</script>

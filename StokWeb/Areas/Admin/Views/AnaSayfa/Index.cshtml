@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<!-- Stil ve animasyon kütüphaneleri -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh; background: linear-gradient(120deg, #f6d365, #fda085);">
+    <div class="container">
+        <!-- Üstteki iki kart -->
+        <div class="row justify-content-center mb-4">
+            <!-- Kart Yönetimi -->
+            <div class="col-lg-5 col-md-6 mb-4 animate__animated animate__fadeInLeft">
+                <div class="card bg-primary text-white" style="width: 300px; height: 200px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body d-flex justify-content-center align-items-center text-center">
+                        <i class="fas fa-credit-card fa-2x mr-2"></i> Kartlar
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="/Admin/Card" data-toggle="tooltip" title="Kartları yönetmek için tıklayın">Detayları Gör</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bileşen Yönetimi -->
+            <div class="col-lg-5 col-md-6 mb-4 animate__animated animate__fadeInRight">
+                <div class="card bg-warning text-white" style="width: 300px; height: 200px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body d-flex justify-content-center align-items-center text-center">
+                        <i class="fas fa-cogs fa-2x mr-2"></i> Bileşenler
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="/Admin/Item" data-toggle="tooltip" title="Bileşenleri yönetmek için tıklayın">Detayları Gör</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Alttaki iki kart -->
+        <div class="row justify-content-center">
+            <!-- Karta Bileşen Ekleme -->
+            <div class="col-lg-5 col-md-6 mb-4 animate__animated animate__fadeInLeft">
+                <div class="card bg-success text-white" style="width: 300px; height: 200px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body d-flex justify-content-center align-items-center text-center">
+                        <i class="fas fa-plus fa-2x mr-2"></i> Karta Bileşen Ekleme
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="/Admin/CardItemControllers" data-toggle="tooltip" title="Kartlara bileşen eklemek için tıklayın">Detayları Gör</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                <!-- Kullanıcı Yönetimi -->
+                <div class="col-lg-5 col-md-6 mb-4 animate__animated animate__fadeInRight">
+                    <div class="card bg-danger text-white" style="width: 300px; height: 200px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                        <div class="card-body d-flex justify-content-center align-items-center text-center">
+                            <i class="fas fa-users fa-2x mr-2"></i> Kullanıcı Yönetimi
+                        </div>
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="/Admin/User" data-toggle="tooltip" title="Kullanıcıları yönetmek için tıklayın">Detayları Gör</a>
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Tooltip ve diğer özellikleri etkinleştirme -->
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

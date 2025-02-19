@@ -1,0 +1,127 @@
+﻿@model Entity.CardItem
+
+@{
+    ViewData["Title"] = "CreateCardItem";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title" style="display: flex; justify-content: center; font-size: 28px;">Karta Bileşen Ekleme</h4>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form method="post" id="cardItemForm">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white text-center">
+                            <div class="card-title" style="font-size: 20px;">Kart ve Bileşen Bilgileri</div>
+                        </div>
+                        <div class="card-body">
+                            <!-- CardId Select Box -->
+                            <div class="form-group">
+                                <label for="CardId" class="text-center d-block" style="font-size: 16px;">Kart Seçiniz</label>
+                                <select class="form-control" asp-for="CardId" id="CardId" onchange="updateCardName()">
+                                    @if (ViewBag.CardList != null && ViewBag.CardList is List<Entity.Card>)
+                                    {
+                                        foreach (var card in ViewBag.CardList as List<Entity.Card>)
+                                        {
+                                            <option value="@card.CardId" data-name="@card.CardName">@card.CardName</option>
+                                        }
+                                    }
+                                </select>
+                                <input type="hidden" id="SelectedCardName" name="CardName" />
+                            </div>
+
+                            <!-- ItemId ve Quantity Alanları İçin Form Container -->
+                            <div id="formContainer"></div>
+
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="button" id="addButton" class="btn btn-success btn-sm" style="font-size: 14px;">Bileşen Ekle</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoryname" class="text-center d-block" style="font-size: 16px;">Kart Stoğunuzu Giriniz</label>
+                            <input type="number" class="form-control" asp-for="Quantity" id="Quantity">
+                        </div>
+
+                        <div class="card-footer text-center">
+                            <button class="btn btn-success btn-lg" type="submit" style="font-size: 16px;">Oluştur</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Card seçimi değiştiğinde, CardName'yi hidden input'a yazıyoruz.
+    function updateCardName() {
+        var selectedOption = document.getElementById("CardId").selectedOptions[0];
+        document.getElementById("SelectedCardName").value = selectedOption.getAttribute("data-name");
+    }
+
+    // Add item button functionality
+    document.getElementById('addButton').addEventListener('click', function () {
+        let formContainer = document.getElementById('formContainer');
+
+        // Yeni bir div oluşturuyoruz
+        let newFormGroup = document.createElement('div');
+        newFormGroup.classList.add('form-group', 'mb-3');
+
+        // Yan yana olmak için flexbox kullanacağız
+        let flexContainer = document.createElement('div');
+        flexContainer.classList.add('d-flex', 'justify-content-between');
+        flexContainer.style.gap = '15px'; // Aralarındaki boşluk için
+
+        // ItemId Select box
+        let itemSelectGroup = document.createElement('div');
+        itemSelectGroup.classList.add('form-group', 'w-50');
+        itemSelectGroup.innerHTML = `
+                    <label for="ItemId" style="font-size: 16px;">Bileşen Seçiniz</label>
+                    <select class="form-control" name="ItemIds[]">
+    @if (ViewBag.ItemList != null && ViewBag.ItemList is List<Entity.Item>)
+    {
+        @foreach (var item in ViewBag.ItemList as List<Entity.Item>)
+        {
+                                                <option value="@item.ItemId" data-name="@item.ItemName">@item.ItemName</option>
+        }
+    }
+                    </select>
+                    <input type="hidden" name="ItemNames[]" id="ItemNames" />
+                `;
+
+        // Quantity input box
+        let quantityGroup = document.createElement('div');
+        quantityGroup.classList.add('form-group', 'w-50');
+        quantityGroup.innerHTML = `
+                    <label for="Quantity" style="font-size: 16px;">Adet Giriniz</label>
+                    <input type="number" class="form-control" name="Quantities[]" />
+                `;
+
+        // Item select change event to update item name
+        let itemSelect = itemSelectGroup.querySelector("select");
+        itemSelect.addEventListener("change", function () {
+            let selectedItem = itemSelect.selectedOptions[0];
+            let itemNameInput = itemSelectGroup.querySelector("input");
+            itemNameInput.value = selectedItem.getAttribute("data-name");
+        });
+
+        // Flex container içine her iki form grubunu ekliyoruz
+        flexContainer.appendChild(itemSelectGroup);
+        flexContainer.appendChild(quantityGroup);
+
+        // Flex container'ı yeni form grubu içine ekliyoruz
+        newFormGroup.appendChild(flexContainer);
+
+        // Son olarak yeni form grubunu formContainer'a ekliyoruz
+        formContainer.appendChild(newFormGroup);
+    });
+</script>
